@@ -240,3 +240,47 @@ JNIEXPORT jlong JNICALL Java_ActiveDirectory_passWordLastSet
     printf("Combined = %I64d\n", i64);
     return i64;
 }
+
+int ResetPassWord(LPCWSTR pwszAccountName, LPCWSTR pwszNewPassword) {
+    HRESULT hr;
+    CoInitialize(NULL);
+    IADsContainer* pUsers = NULL;
+    CComBSTR  path = L"LDAP://WIN-I5NTT42PG5D.test.local/CN=";
+    path += pwszAccountName;
+    path += L",CN=Users,DC=Test,DC=local";
+    hr = ADsOpenObject(path, L"Administrator", L"admin@Admin",
+        ADS_SECURE_AUTHENTICATION, // For secure authentication
+        IID_IADsContainer,
+        (void**)&pUsers);
+    std::string messageee = std::system_category().message(hr);
+    std::cout << messageee << std::endl;
+    if (SUCCEEDED(hr))
+    {
+        IADsUser* pDisp = NULL;
+        hr = pUsers->QueryInterface(IID_IADsUser, (void**)&pDisp);
+        if (SUCCEEDED(hr)) {
+            hr = pDisp->SetPassword((BSTR)pwszNewPassword);
+            CoUninitialize();
+            std::string message = std::system_category().message(hr);
+            std::cout << message << std::endl;
+            return hr;
+        }
+        std::string message = std::system_category().message(hr);
+        std::cout << message << std::endl;
+        return hr;
+    }
+    std::string message = std::system_category().message(hr);
+    std::cout << message << std::endl;
+    return hr;
+}
+
+JNIEXPORT jint JNICALL Java_ActiveDirectory_resetPassword
+(JNIEnv* env, jobject object, jstring user, jstring pass){
+
+    LPCWSTR username = jstring2string(env, user);
+    LPCWSTR newpass = jstring2string(env, pass);
+    int result = ResetPassWord(username, newpass);
+    std::cout << "pwd changed" << std::endl;
+    return result;
+
+}

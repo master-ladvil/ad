@@ -39,6 +39,14 @@ extern "C" {
 	JNIEXPORT jlong JNICALL Java_ActiveDirectory_passWordLastSet
 	(JNIEnv*, jobject, jstring);
 
+	/*
+	 * Class:     ActiveDirectory
+	 * Method:    resetPassword
+	 * Signature: (Ljava/lang/String;Ljava/lang/String;)I
+	 */
+	JNIEXPORT jint JNICALL Java_ActiveDirectory_resetPassword
+	(JNIEnv*, jobject, jstring, jstring);
+
 #ifdef __cplusplus
 }
 #endif
