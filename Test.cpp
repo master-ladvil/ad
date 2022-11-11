@@ -2,7 +2,6 @@
 #include <iostream>
 #include <jni.h>
 #include "Test.h"
-
 #include "activeds.h"
 #include <string>
 
