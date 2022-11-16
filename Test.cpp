@@ -13,7 +13,6 @@ std::cout << pass << std::endl;
     IADsContainer* pCont;
     IDispatch* pDisp = NULL;
     IADs* pUser;
-
     // Initialize COM before calling any ADSI functions or interfaces.
     CoInitialize(NULL);
 
